@@ -21,6 +21,7 @@ def parse_server_info(client_data):
     ''' parse server info from client data and
     returns 4 tuples of (server_ip, server_port, hostname, isCONNECT) '''
     status_line = client_data.split("\n")[0]
+    print(client_data)
     URL = status_line.split(" ")[1]
 
     if "http://" in URL or ":80" in URL:
@@ -124,7 +125,7 @@ def proxy(client_socket,client_IP):
         except: #error handling 
             client_socket.sendall(b"HTTP 502 BAD GATEWAY") 
             return
-        print(type(mod))
+
         server_socket.sendall(mod)
         while True:
                 try:
@@ -139,12 +140,11 @@ def proxy(client_socket,client_IP):
         return #returns once data is not recieved 
         
     if(parse_info[3]): #output of parse (return (server_ip, server_port, hostname, False)), checks if CONNECT
-        foo(parse_info, client_socket, server_socket)  #if connected 
+        foo(parse_info, client_socket, server_socket)  #if connected     
         create_log(parse_info[2],data, modify_headers(data), server_response=True)
     else:
         bar(parse_info, client_socket, server_socket, data) #if not connected 
-        create_log(parse_info[2],data, modify_headers(data), server_response=False)
-    
+        create_log(parse_info[2],data, modify_headers(data), server_response=True)
     global LOG_FLAG
 
 
